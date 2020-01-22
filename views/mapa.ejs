@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    /* Set the size of the div element that contains the map */
+    #map {
+      height: 600px;
+      /* The height is 400 pixels */
+      width: 100%;
+      /* The width is the width of the web page */
+    }
+    .checkbox label:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  
+  .checkbox .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+  }
+  
+  .checkbox .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 15%;
+  }
+  
+  .checkbox label input[type="checkbox"] {
+    display: none;
+  }
+  
+  .checkbox label input[type="checkbox"]+.cr>.cr-icon {
+    opacity: 0;
+  }
+  
+  .checkbox label input[type="checkbox"]:checked+.cr>.cr-icon {
+    opacity: 1;
+  }
+  
+  .checkbox label input[type="checkbox"]:disabled+.cr {
+    opacity: .5;
+  }
+  </style>
+  </head>
+
+<body>
+  <h3>GOOGLE MAPS () </h3>
+  <!--The div element for the map -->
+  <div id="map"></div>
+
+  <script type="text/javascript">
+    var map;
+    var estiloMark = '<form action="/mapa/reciclar" method="POST"><div class="checkbox">'+
+      '<h4>Selecione o que pretende reciclar .</h4>'+
+  '<label>'+
+   '<input type="checkbox" name="grupo1" value="Garrafas Pet, plastico">'+
+   '<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>'+
+   'Garrafas Pet, plastico'+
+   '</label>'+
+'</div>'+
+
+'<div class="checkbox">'+
+  '<label>'+
+   '<input type="checkbox" name="grupo2" value="Papel,Papelão" >'+
+   '<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>'+
+   'Papel,Papelão'+
+   '</label>'+
+'</div>'+
+'<!-- Checked checkbox -->'+
+'<div class="checkbox">'+
+'  <label>'+
+ '  <input type="checkbox" name="grupo3" value="Ferro , aço, aluminio" >'+
+   '<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>'+
+   'Ferro , aço, aluminio.'+
+   '</label>'+
+   '<br>'+
+   '<button class="form-control btn btn-default " >Confirmar</button>'+
+   '</form>'+
+'</div>';
+
+    // Initialize and add the map
+    const loadMap = () => {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: "<%=endereco%>,<%=bairro%>,Bagé,rio grande do sul,brasil" }, geocoderCallback);
+
+      function geocoderCallback(results, status) {
+
+        if (status == google.maps.GeocoderStatus.OK) {
+
+          var result = results[0];
+
+          console.log(result);
+
+          var sw = result.geometry.bounds.getSouthWest();
+          var nw = result.geometry.bounds.getNorthEast();
+
+          var location = result.geometry.location;
+
+          var bounds = new google.maps.LatLngBounds(sw, nw);
+
+
+          toMap(location, bounds)
+        
+          google.maps.event.addListener(map, 'dblclick', function (event) {
+
+            var marker = new google.maps.Marker({
+              map: map,
+              position: event.latLng,
+              title: 'Sua casa',
+              icon: {
+                url: 'https://img.icons8.com/cotton/64/000000/home--v2.png',
+              }
+            });
+            var infowindow = new google.maps.InfoWindow({
+              content: "<form action='/mapa/confirmar/" + event.latLng.lat() + "&" + event.latLng.lng() + "'><label>Endereço: <%=endereco%> <br> numero da casa:<%=numcasa%>  <br> bairro : <%=bairro%> </label> <br><br><button class='btn btn-default' style='float:right'>Confirmar</button</form>"
+            });
+            infowindow.open(map, marker);
+            
+          });
+          carregaCasa('<%=lat%>','<%=lng%>');
+
+        }
+      }
+
+ 
+    }
+    function toMap(center, bounds) {
+
+      var options = {
+        zoom: 20,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: center
+      }
+      map = new google.maps.Map(document.getElementById("map"), options);
+    
+      //  var marker = new google.maps.Marker({map: map,position: center });
+
+
+
+      // var polygon = new google.maps.Rectangle({ map: map, bounds: bounds });
+
+
+    }
+
+    const carregaCasa = (lat,lng) =>{
+      var casa = new google.maps.LatLng(lat,lng);
+      var markerCasa = new google.maps.Marker({
+              map: map,
+              position: casa ,
+              title: 'Sua casa',
+              icon: {
+                url: 'https://img.icons8.com/cotton/64/000000/home--v2.png',
+              }
+            });
+            
+            markerCasa.setMap(map)
+           
+          
+            google.maps.event.addListener(markerCasa, 'click', function (event) {
+              var optionRecicle = new google.maps.InfoWindow({
+              content: estiloMark
+            });
+
+            optionRecicle.open(map, markerCasa);
+            });
+ }
+          
+       
+    window.onload = loadMap;
+
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEpf_5eIlBmagNeainmtVlkaozPOwzMOM">
+
+  </script>
+</body>
+
+</html>

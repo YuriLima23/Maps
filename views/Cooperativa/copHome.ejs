@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/cabecalho/css/style.css">
+
+
+  <title>Cooperativa recicle</title>
+</head>
+<style>
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 600px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+  }
+</style>
+
+<body>
+
+  <nav class="nav">
+    <div class="burger --active">
+      <div class="burger__patty"></div>
+    </div>
+
+    <ul class="nav__list">
+      <li class="nav__item">
+        <a href="#1" class="nav__link c-blue"><i class="fa fa-camera-retro"></i></a>
+      </li>
+      <li class="nav__item">
+        <a href="#2" class="nav__link c-yellow scrolly"><i class="fa fa-bolt"></i></a>
+      </li>
+      <li class="nav__item">
+        <a href="#3" class="nav__link c-red"><i class="fa fa-music"></i></a>
+      </li>
+      <li class="nav__item">
+        <a href="#4" class="nav__link c-green"><i class="fa fa-paper-plane"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <div id="map"></div>
+
+
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script src="css/cabecalho/js/main.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEpf_5eIlBmagNeainmtVlkaozPOwzMOM"></script>
+
+<script>
+
+  const loadMap = () => {
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: "centro,Bagé,rio grande do sul,brasil" }, geocoderCallback);
+
+    function geocoderCallback(results, status) {
+
+      if (status == google.maps.GeocoderStatus.OK) {
+
+        var result = results[0];
+
+        console.log(result);
+
+        var sw = result.geometry.bounds.getSouthWest();
+        var nw = result.geometry.bounds.getNorthEast();
+
+        var location = result.geometry.location;
+
+        var bounds = new google.maps.LatLngBounds(sw, nw);
+
+
+        toMap(location, bounds)
+
+
+
+      }
+
+
+
+    }
+  }
+
+
+
+  function toMap(center, bounds) {
+
+    var op;
+    var j = 0;
+    var lista = [];
+    var markerCasa;
+    var options = {
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: center
+    }
+    map = new google.maps.Map(document.getElementById("map"), options);
+    '<% for(var i = 0 ; i < casas.length ; i++){ %>'
+
+
+    if ('<%=casas[i].andamento%>' == false) {
+      markerCasa = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng('<%=casas[i].lat%>', '<%=casas[i].lng%>'),
+        title: 'Casa <%=i%>',
+        icon: {
+          url: 'https://img.icons8.com/cotton/64/000000/home--v2.png',
+        }
+      });
+    } else {
+      markerCasa = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng('<%=casas[i].lat%>', '<%=casas[i].lng%>'),
+        title: 'Casa <%=i%>',
+        icon: {
+          url: 'images/casa_verde.png',
+        }
+      });
+
+    }
+
+    op = '<div><form action="/confirma">' +
+      '<label>Digite a data da visita</label>' +
+      '<input type="date" class="form-control" name="data_visita"><br>' +
+      '<input type="hidden" value="<%=casas[i].id%>" class="form-control" name="id"> <br>' +
+      '<button style ="float:right;" class="btn btn-success">Confirmar Visita</button></form></div>';
+
+    lista.push(markerCasa);
+    new google.maps.event.addListener(lista['<%=i%>'], 'click', (event) => {
+
+      var optionInfo = new google.maps.InfoWindow({
+        content: op
+      })
+      optionInfo.open(map, lista['<%=i%>']);
+    })
+    markerCasa.setMap(map);
+
+
+    '<% } %>'
+
+
+    // var polygon = new google.maps.Rectangle({ map: map, bounds: bounds });
+
+
+  }
+
+
+
+  window.onload = loadMap;
+</script>
+
+
+</html>

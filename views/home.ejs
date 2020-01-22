@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="css/home/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/home/css/style.css">
+</head>
+<body>
+
+    <div class="main">
+
+        <div class="container">
+            <form action="/home/cadastrar" method="POST" id="signup-form" class="signup-form">
+                <div>
+                    <h3></h3>
+                    <fieldset>
+                            <select type="text" name="bairro"  />
+                            <option value=""> 01 . Selecione Seu bairro</option>
+                             <option value="Centro">Centro</option>
+                             <option value="São José">São José</option>
+                             <option value="Menino Deus">Menino Deus</option>
+                             <option value="Floresta">Floresta</option>
+                             <option value="São Judas">São Judas</option>
+                             <option value="Estrela D''alva">Estrela D''alva</option>
+                             <option value="Pedra Branca">Pedra Branca </option>
+                             <option value="Habitar Brasil">Habitar Brasil (Morgado Rosa)</option>
+                             <option value="Prado velho">Prado velho</option>
+                             <option value="Castro Alves">Castro Alves (IVONE)</option>
+                             <option value="Tiaraju">Tiaraju</option>
+                             <option value="Passo do Principe">Passo do Principe</option>
+                             <option value="Arvorezinha">Arvorezinha </option>
+                             <option value="Popular">Popular </option>
+                             <option value="Taruma ">Taruma </option>
+                             <option value="São Jorge">São Jorge</option>
+                             <option value="Getulio Vargas">Getulio Vargas</option>
+                             <option value="Industrial">Industrial</option>
+                             <option value="São martim">São martim</option>
+     
+                         
+                         </select>
+                       </fieldset>
+
+                    <h3></h3>
+                    <fieldset>
+                        <input type="number" name="numeroCasa" id="numeroCasa" />
+                        <label for="numeroCasa" class="form-label">02 . Numero da sua casa ?</label>
+                    </fieldset>
+
+                    <h3></h3>
+                    <fieldset>
+                            <input type="text" name="endereco" id="endereco" />
+                            <label for="endereco" class="form-label">03 . Endereço da sua casa ?</label>
+                      </fieldset>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="css/home/vendor/jquery/jquery.min.js"></script>
+    <script src="css/home/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="css/home/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="css/home/vendor/jquery-steps/jquery.steps.min.js"></script>
+    <script src="css/home/js/main.js"></script>
+</body>
+</html>
